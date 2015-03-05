@@ -6,6 +6,7 @@ use std::default::Default;
 use Normal;
 use TextureCoords;
 use Position;
+use SkinningWeights;
 use Object;
 use Geometry;
 
@@ -32,7 +33,8 @@ impl Model {
             T: Default,
             (Position, T): Pair<Data = Position, Object = T> + SetAt,
             (TextureCoords, T): Pair<Data = TextureCoords, Object = T> + SetAt,
-            (Normal, T): Pair<Data = Normal, Object = T> + SetAt
+            (Normal, T): Pair<Data = Normal, Object = T> + SetAt,
+            (SkinningWeights, T): Pair<Data = SkinningWeights, Object = T> + SetAt
     {
         let start = objects.0.len();
         for obj in obj_set.objects.iter() {

@@ -9,6 +9,7 @@ use TextureCoords;
 use Normal;
 use VertexFormat;
 use VertexFormatError;
+use SkinningWeights;
 
 /// A geometry consists of a list of triangles.
 /// The triangles are stored separately,
@@ -20,7 +21,8 @@ fn vtn_to_vertex<T>(a: VTNIndex, obj: &wobj::obj::Object) -> T
         T: Default,
         (Position, T): Pair<Data = Position, Object = T> + SetAt,
         (TextureCoords, T): Pair<Data = TextureCoords, Object = T> + SetAt,
-        (Normal, T): Pair<Data = Normal, Object = T> + SetAt
+        (Normal, T): Pair<Data = Normal, Object = T> + SetAt,
+        (SkinningWeights, T): Pair<Data = SkinningWeights, Object = T> + SetAt,
 {
     use quack::Set;
 
@@ -31,6 +33,11 @@ fn vtn_to_vertex<T>(a: VTNIndex, obj: &wobj::obj::Object) -> T
         position.y as f32,
         position.z as f32
     ]));
+
+    if obj.joint_weights.len() == obj.vertices.len() {
+        let weights = obj.joint_weights[a.0];
+        vertex.set_mut(SkinningWeights(weights.joints, weights.weights));
+    }
     if let Some(uv) = a.1 {
         let uv = obj.tex_vertices[uv];
         vertex.set_mut(TextureCoords([uv.x as f32, uv.y as f32]));
@@ -63,7 +70,8 @@ impl Geometry {
             T: Default,
             (Position, T): Pair<Data = Position, Object = T> + SetAt,
             (TextureCoords, T): Pair<Data = TextureCoords, Object = T> + SetAt,
-            (Normal, T): Pair<Data = Normal, Object = T> + SetAt
+            (Normal, T): Pair<Data = Normal, Object = T> + SetAt,
+            (SkinningWeights, T): Pair<Data = SkinningWeights, Object = T> + SetAt
     {
         let start = indices.len();
         let mut i = vertices.len() as u32;

@@ -6,6 +6,7 @@ use std::default::Default;
 use Position;
 use TextureCoords;
 use Normal;
+use SkinningWeights;
 use Geometry;
 
 /// An object consists of a list of geometries.
@@ -30,7 +31,8 @@ impl Object {
             T: Default,
             (Position, T): Pair<Data = Position, Object = T> + SetAt,
             (TextureCoords, T): Pair<Data = TextureCoords, Object = T> + SetAt,
-            (Normal, T): Pair<Data = Normal, Object = T> + SetAt
+            (Normal, T): Pair<Data = Normal, Object = T> + SetAt,
+            (SkinningWeights, T): Pair<Data = SkinningWeights, Object = T> + SetAt
     {
         let start = geometries.0.len();
         for geom in obj.geometry.iter() {

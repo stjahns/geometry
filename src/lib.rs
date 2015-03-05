@@ -24,6 +24,12 @@ pub struct TextureCoords(pub [f32; 2]);
 /// Property type for normal.
 pub struct Normal(pub [f32; 3]);
 
+/// Property type for skinned joint weights.
+pub struct SkinningWeights(
+    pub [usize; 4], // joint indices
+    pub [f32; 4], // weights
+);
+
 /// Description of vertex format.
 pub enum VertexFormat {
     /// Vertex contains position coordinates.
